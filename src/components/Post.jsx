@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom'; // Importa Link desde react-router-dom
-
-
+import { Link } from 'react-router-dom';
 
 const Post = () => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    axios.get('https://jsonplaceholder.typicode.com/posts')
+    fetch('https://jsonplaceholder.typicode.com/posts')
       .then(response => {
-        setPosts(response.data);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        setPosts(data);
       })
       .catch(error => {
         console.error('Error fetching posts:', error);
@@ -32,19 +35,15 @@ const Post = () => {
                   <time dateTime={post.datetime} className="text-gray-500">
                     {post.date}
                   </time>
-                  {/* Enlace al detalle del post */}
-                  
                 </div>
                 <div className="group relative">
-                  <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
-                    {/* Título del post */}
+                  <ol className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
                     <Link to={`/post/${post.id}`} className="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">
-                    {post.title}
-                  </Link>
-                  </h3>
+                      {post.title}
+                    </Link>
+                  </ol>
                   <p className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">{post.body}</p>
                 </div>
-                
               </article>
             ))}
           </div>
@@ -55,5 +54,6 @@ const Post = () => {
 };
 
 export default Post;
+
 
 

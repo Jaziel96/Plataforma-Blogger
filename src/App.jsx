@@ -11,12 +11,12 @@ const App = () => {
   
       <Routes>
         {/* Define tus rutas dentro de <Routes> */}
-        <Route path="/" element={<Layout />} />
+        <Route path="/" element={<Layout />} >
           <Route index element={<Post />} />
           <Route path='/post' element={<Post />} />
           <Route path='/post/:id' element={<Detailspost />} />
           <Route path='/user/:id' element={<Users />} />
-          
+        </Route>
         {/* Aquí puedes agregar más rutas según sea necesario <Route path="/post/:id" element={<Detailspost />} /> */}
       </Routes>
     
