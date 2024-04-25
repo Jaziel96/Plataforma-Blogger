@@ -1,20 +1,26 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Posts from './components/Posts';
-import 'tailwindcss/tailwind.css'; // Si estás utilizando JavaScript o JSX para estilos
-
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import Post from './components/Post';
+import Layout from './components/Layout';
+import Detailspost from './components/Detailspost';
+import Users from './components/Users';
 
 const App = () => {
   return (
-    <Router>
-  <div>
-    <Routes>
-      {/* Define tus rutas dentro de <Routes> */}
-      <Route path="/" element={<Posts />} />
-      {/* Aquí puedes agregar más rutas según sea necesario */}
-    </Routes>
-  </div>
-    </Router>
+    <BrowserRouter>
+  
+      <Routes>
+        {/* Define tus rutas dentro de <Routes> */}
+        <Route path="/" element={<Layout />} />
+          <Route index element={<Post />} />
+          <Route path='/post' element={<Post />} />
+          <Route path='/post/:id' element={<Detailspost />} />
+          <Route path='/user/:id' element={<Users />} />
+          
+        {/* Aquí puedes agregar más rutas según sea necesario <Route path="/post/:id" element={<Detailspost />} /> */}
+      </Routes>
+    
+    </BrowserRouter>
   );
 };
 
