@@ -15,9 +15,7 @@ const Header = () => {
             <li>
               <Link to="/post" className="text-white font-bold hover:bg-gray-700 px-3 py-2 rounded">Post</Link>
             </li>
-            <li>
-              <Link to="/nosotros" className="text-white font-bold hover:bg-gray-700 px-3 py-2 rounded">Nosotros</Link>
-            </li>
+            
           </ul>
         </nav>
       </div>

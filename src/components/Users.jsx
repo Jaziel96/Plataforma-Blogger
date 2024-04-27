@@ -1,33 +1,61 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useParams, Link } from 'react-router-dom';
 
-const Users = ({ postId }) => {
-  const [comments, setComments] = useState([]);
+const UserDetails = () => {
+  const { id } = useParams();
+  const [user, setUser] = useState(null);
+  const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    axios.get(`https://jsonplaceholder.typicode.com/posts/${postId}/comments`)
-      .then(response => {
-        setComments(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching comments:', error);
-      });
-  }, [postId]);
+    const fetchUserDetails = async () => {
+      try {
+        // Obtener detalles del usuario
+        const userResponse = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`);
+        if (!userResponse.ok) {
+          throw new Error('Failed to fetch user details');
+        }
+        const userDetails = await userResponse.json();
+        setUser(userDetails);
+
+        // Obtener publicaciones del usuario
+        const postsResponse = await fetch(`https://jsonplaceholder.typicode.com/posts?userId=${id}`);
+        if (!postsResponse.ok) {
+          throw new Error('Failed to fetch user posts');
+        }
+        const postsData = await postsResponse.json();
+        setPosts(postsData);
+      } catch (error) {
+        console.error('Error fetching user details and posts:', error);
+      }
+    };
+
+    fetchUserDetails();
+  }, [id]);
 
   return (
     <div>
-      <h2>Comments</h2>
+      {user && (
+        <div>
+          <h2>User Details</h2>
+          <p>Name: {user.name}</p>
+          <p>Email: {user.email}</p>
+          <p>Website: {user.website}</p>
+        </div>
+      )}
+
+      <h2>User Posts</h2>
       <ul>
-        {comments.map(comment => (
-          <li key={comment.id}>
-            <h3>{comment.name}</h3>
-            <p>{comment.body}</p>
-            <p>By: {comment.email}</p>
+        {posts.map(post => (
+          <li key={post.id}>
+            <Link to={`/post/${post.id}`} className='font-semibold text-blue-500 hover:underline'>
+              {post.title}
+            </Link>
+            <p>{post.body}</p>
           </li>
         ))}
       </ul>
     </div>
   );
-};
+}
 
-export default Users;
+export default UserDetails;
